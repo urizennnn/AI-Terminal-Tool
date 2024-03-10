@@ -1,45 +1,39 @@
 @echo off
-setlocal enabledelayedexpansion
-
-REM Set Python version
-set PYTHON_VERSION=3.9.5
-
-REM Download Python installer
-echo Downloading Python %PYTHON_VERSION% installer...
-powershell -Command "Invoke-WebRequest https://www.python.org/ftp/python/%PYTHON_VERSION%/python-%PYTHON_VERSION%-amd64.exe -OutFile python-installer.exe"
-
-REM Run Python installer interactively
-echo Please run the Python installer manually by double-clicking on python-installer.exe.
-echo Once installation is complete, please press any key to continue...
-pause >nul
-
-REM Check if Python is installed
-python --version >nul 2>nul
-if !errorlevel! neq 0 (
-    echo Failed to install Python %PYTHON_VERSION%
-    exit /b 1
-)
-
-REM Create virtual environment
-echo Creating virtual environment...
-python -m venv venv
-call venv\Scripts\activate.bat
 
 REM Install dependencies
 echo Installing dependencies...
 pip install openai redis
 
-REM Create package directory
-mkdir "%USERPROFILE%\Program Files\AIFE"
+REM Create directory to store packaged files
+set INSTALL_DIR=%PROGRAMFILES%\AIFE
+mkdir "%INSTALL_DIR%"
 
-REM Copy necessary files to package directory
-copy /Y ".\\bin\\ai-tool\\main.py" "%USERPROFILE%\Program Files\AIFE"
+REM Copy necessary files to the installation directory
+copy /Y .\bin\ "%INSTALL_DIR%"
 
-REM Create package archive
-echo Creating package archive...
-powershell -Command "Compress-Archive -Path '%USERPROFILE%\Program Files\AIFE' -DestinationPath '%USERPROFILE%\AIFE.zip'"
+REM Set environment variables
+setx PATH "%PATH%;%INSTALL_DIR%" /M
 
-REM Clean up package directory
-rmdir /S /Q "%USERPROFILE%\Program Files\AIFE"
+REM Create a batch file to run the application
+echo @echo off>"%INSTALL_DIR%\run_aife.bat"
+echo python "%INSTALL_DIR%\main.py" %%*>>"%INSTALL_DIR%\run_aife.bat"
 
-echo Done
+REM Create a shortcut in the Start Menu
+set SCRIPT_PATH=%TEMP%\create_shortcut.vbs
+echo Set oWS = WScript.CreateObject("WScript.Shell") >> %SCRIPT_PATH%
+echo Set oLink = oWS.CreateShortcut("%%APPDATA%%\Microsoft\Windows\Start Menu\Programs\AIFE.lnk") >> %SCRIPT_PATH%
+echo oLink.TargetPath = "%INSTALL_DIR%\run_aife.bat" >> %SCRIPT_PATH%
+echo oLink.Save >> %SCRIPT_PATH%
+cscript //nologo %SCRIPT_PATH%
+del %SCRIPT_PATH%
+
+REM Add a context menu entry to run the application from the terminal
+reg add "HKEY_CLASSES_ROOT\Directory\Background\shell\AIFE" /v Icon /d "%INSTALL_DIR%\aife.ico" /f
+reg add "HKEY_CLASSES_ROOT\Directory\Background\shell\AIFE\command" /d "\"%INSTALL_DIR%\run_aife.bat\"" /f
+
+REM Display a message to inform the user about the installation
+echo AIFE has been installed successfully.
+echo You can run the application from the Start Menu or by right-clicking in any folder and selecting "AIFE".
+
+REM Cleanup
+rmdir /s /q "%TEMP%\AIFE"
