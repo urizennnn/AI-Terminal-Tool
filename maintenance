@@ -1,0 +1,5 @@
+Package:aife-windows
+Version:0.1.0
+Maintainer: Akaaha Victor 
+Architecture:all
+Description: This is a fork/clone of an AI tool that allows the use of natural text in terminal. See 'https://github.com/CommanderOutpost/AI-Terminal-Tool' for original code and Linux support.
