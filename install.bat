@@ -2,7 +2,7 @@
 
 REM Install dependencies
 echo Installing dependencies...
-pip install openai redis
+pip install openai redis python-dotenv
 
 REM Create directory to store packaged files
 set INSTALL_DIR=%PROGRAMFILES%\AIFE
