@@ -9,8 +9,9 @@ set INSTALL_DIR=%PROGRAMFILES%\AIFE
 mkdir "%INSTALL_DIR%"
 
 REM Copy necessary files to the installation directory
-copy /Y .\bin\ "%INSTALL_DIR%"
-
+copy /Y .\bin "%INSTALL_DIR%"
+xcopy /E /Y ".\bin\*" "%INSTALL_DIR%"
+copy /Y ".\install.bat" "%INSTALL_DIR%"
 REM Set environment variables
 setx PATH "%PATH%;%INSTALL_DIR%" /M
 
