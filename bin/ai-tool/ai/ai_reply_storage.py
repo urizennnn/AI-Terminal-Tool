@@ -1,8 +1,7 @@
 import redis
 
-
 class RedisDatabase:
-    def __init__(self, host="localhost", port=6379, db=0):
+    def __init__(self, host="redis", port=6379, db=0):
         # Connect to the Redis server
         self.redis_db = redis.StrictRedis(
             host=host, port=port, db=db, decode_responses=True
