@@ -1,14 +1,7 @@
 import redis
 import os
-host = os.getenv("REDIS_HOST")
-
-port = int(os.getenv("REDIS_PORT", "6379"))
-
-password=os.getenv("REDIS_PASSWORD"
-
-                   )
 class RedisDatabase:
-    def __init__(self, host=host, port=port, password=password, db=0):
+    def __init__(self, host="redis-13367.c274.us-east-1-3.ec2.cloud.redislabs.com", port=13367, password="IABJr9jMiuXSYAgJx2qdBXdNIAquqKbE", db=0):
         # Attempt to connect to the Redis server
         try:
             self.redis_db = redis.StrictRedis(

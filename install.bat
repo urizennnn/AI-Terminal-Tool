@@ -1,10 +1,8 @@
 @echo off
 
 
-rmdir /s /q %PROGRAMFILES%\AIFE
 
-rmdir %PROGRAMFILES%\AIFE	/s /q
-echo removed file
+REM Set installation directory
 set INSTALL_DIR=%PROGRAMFILES%\AIFE
 mkdir "%INSTALL_DIR%"
 
@@ -19,7 +17,7 @@ setx PATH "%PATH%;%INSTALL_DIR%" /M
 
 REM Create a batch file to run the application
 echo @echo off>"%INSTALL_DIR%\run_aife.bat"
-echo python "%INSTALL_DIR%\main.py" %%*>>"%INSTALL_DIR%\run_aife.bat"
+echo python "%INSTALL_DIR%\main.py" %%\*>>"%INSTALL_DIR%\run_aife.bat"
 
 REM Create a shortcut in the Start Menu
 set SCRIPT_PATH=%TEMP%\create_shortcut.vbs
@@ -29,16 +27,10 @@ echo oLink.TargetPath = "%INSTALL_DIR%\run_aife.bat" >> %SCRIPT_PATH%
 echo oLink.Save >> %SCRIPT_PATH%
 cscript //nologo %SCRIPT_PATH%
 del %SCRIPT_PATH%
-docker compose up --build -d
-docker run -itd --network ai-terminal-tool_default  --rm redis redis-cli -h redis
-
-REM Add a context menu entry to run the application from the terminal
-reg add "HKEY_CLASSES_ROOT\Directory\Background\shell\AIFE" /v Icon /d "%INSTALL_DIR%\aife.ico" /f
-reg add "HKEY_CLASSES_ROOT\Directory\Background\shell\AIFE\command" /d "\"%INSTALL_DIR%\run_aife.bat\"" /f
 
 REM Display a message to inform the user about the installation
 echo AIFE has been installed successfully.
-echo You can run the application from the Start Menu or by right-clicking in any folder and selecting "AIFE".
+echo You can run the application from the Start Menu.
 
 REM Cleanup
 rmdir /s /q "%TEMP%\AIFE"
