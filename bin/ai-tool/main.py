@@ -10,14 +10,16 @@ OS = os.name
 MAX_ITE = 5
 print(OS)
 
+is_connected = redis_db.is_connected()
+print(is_connected)
+
 if OS == 'nt':
     OS='Windows'
-    return OS
 
 
 for _ in range(MAX_ITE):
     ai_command = generate_command(user_command, OS)
-    if "stop" in ai_command.lower():
+    if "stop" in ai_command:
         print(terminal_output)
         redis_db.delete_all_data()
         break
