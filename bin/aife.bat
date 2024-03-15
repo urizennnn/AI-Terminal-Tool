@@ -1,6 +1,7 @@
 @echo off
 REM Check if a keyword is provided
 if "%1" == "" (
+	echo test
     echo Error: No keyword provided.
     echo Usage: aife-tool [keyword] [command]
     exit /b 1

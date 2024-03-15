@@ -3,3 +3,5 @@ __pycache__
 ai/__pycache__
 terminal/__pycache__
 .env
+docker
+*.Docker

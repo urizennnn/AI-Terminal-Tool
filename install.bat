@@ -1,10 +1,10 @@
 @echo off
 
-REM Install dependencies
-echo Installing dependencies...
-pip install openai redis python-dotenv
 
-REM Create directory to store packaged files
+rmdir /s /q %PROGRAMFILES%\AIFE
+
+rmdir %PROGRAMFILES%\AIFE	/s /q
+echo removed file
 set INSTALL_DIR=%PROGRAMFILES%\AIFE
 mkdir "%INSTALL_DIR%"
 
@@ -29,6 +29,8 @@ echo oLink.TargetPath = "%INSTALL_DIR%\run_aife.bat" >> %SCRIPT_PATH%
 echo oLink.Save >> %SCRIPT_PATH%
 cscript //nologo %SCRIPT_PATH%
 del %SCRIPT_PATH%
+docker compose up --build -d
+docker run -itd --network ai-terminal-tool_default  --rm redis redis-cli -h redis
 
 REM Add a context menu entry to run the application from the terminal
 reg add "HKEY_CLASSES_ROOT\Directory\Background\shell\AIFE" /v Icon /d "%INSTALL_DIR%\aife.ico" /f
