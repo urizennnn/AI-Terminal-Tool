@@ -14,6 +14,9 @@ def generate_command(user_command, os):
     # Initialize Anthropic client
     client = anthropic.Anthropic(api_key=anthropic_api_key)
 
+    redis_db = RedisDatabase()
+    all_data = redis_db.get_all_data()
+
     # Use Anthropic to generate content
     message = client.messages.create(
         model="claude-3-opus-20240229",
@@ -22,12 +25,11 @@ def generate_command(user_command, os):
         messages=[
             {
                 "role": "user",
-                "content": f"The user command is {user_command}, the current data is empty",
+                "content": f"The user command is {user_command}, the current data is {all_data} and the OS is {os}",
             },
         ]
     )
 
     # Extract the generated command from the response
     generated_command = message.content[0].text.strip()
-    print(generated_command)
     return generated_command
