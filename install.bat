@@ -1,6 +1,9 @@
 @echo off
 
 
+pip install anthropic openai redis
+
+
 
 REM Set installation directory
 set INSTALL_DIR=%PROGRAMFILES%\AIFE
